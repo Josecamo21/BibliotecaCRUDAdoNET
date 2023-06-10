@@ -94,6 +94,7 @@ namespace LogicaNegocio
             try
             {
                 libro = daLibro.RegistroCompleto(condicion);
+                //deberan hacer lo necesario para llenar el autor y la categoria de forma completa
             }
             catch (Exception ex)
             {

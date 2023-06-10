@@ -19,7 +19,7 @@ namespace AccesoDatos
         {
             //Comunicarse a la capa de Acceso a Datos
             DataSet miDS = new DataSet();
-            string sentenciaSQL = "Select claveLibro, titulo, claveAutor, claveCategoria From Libros";//
+            string sentenciaSQL = "Select * From vLibros";//
 
             SqlConnection conexionSQL = new SqlConnection(cadConn);
             SqlDataAdapter adaptadorSQL;
@@ -56,8 +56,8 @@ namespace AccesoDatos
             //Rellenar los parámetros
             comandoSQL.Parameters.AddWithValue("@claveLibro", libro.ClaveLibro);
             comandoSQL.Parameters.AddWithValue("@titulo", libro.Titulo);
-            comandoSQL.Parameters.AddWithValue("@claveAutor", libro.ClaveAutor);
-            comandoSQL.Parameters.AddWithValue("@claveCategoria", libro.ClaveCategoria);
+            comandoSQL.Parameters.AddWithValue("@claveAutor", libro.Autor.ClaveAutor);
+            comandoSQL.Parameters.AddWithValue("@claveCategoria", libro.Categoria.ClaveCategoria);
 
             //Cargar la sentencia en el Objeto de Comando
             comandoSQL.CommandText = sentencia;
@@ -174,7 +174,7 @@ namespace AccesoDatos
             SqlDataReader dato;
 
             comandoSQL.Connection = conexionSQL;
-            comandoSQL.CommandText = $"Select claveLibro, titulo, claveAutor, claveCategoria from libros where {condicion}";
+            comandoSQL.CommandText = $"Select claveLibro, titulo, claveAutor, claveCategoria from vLibros where {condicion}";
 
             try
             {
@@ -188,8 +188,8 @@ namespace AccesoDatos
                     libro.ClaveLibro = dato.GetString(0);
                     if (!dato.IsDBNull(1)) //Solo el título podría ser nulo en la BD, por eso validamos!
                         libro.Titulo = dato.GetString(1);
-                    libro.ClaveAutor = dato.GetString(2);
-                    libro.ClaveCategoria = dato.GetString(3);
+                    libro.Autor.ClaveAutor = dato.GetString(2);
+                    libro.Categoria.ClaveCategoria = dato.GetString(3);
                     libro.Existente = true;//Porque es un libro cargado desde SQL
                 }
                 conexionSQL.Close();
@@ -224,8 +224,8 @@ namespace AccesoDatos
 
             comandoSQL.Parameters.AddWithValue("@claveLibro", libro.ClaveLibro);
             comandoSQL.Parameters.AddWithValue("@titulo", libro.Titulo);
-            comandoSQL.Parameters.AddWithValue("@claveAutor", libro.ClaveAutor);
-            comandoSQL.Parameters.AddWithValue("@claveCategoria", libro.ClaveCategoria);
+            comandoSQL.Parameters.AddWithValue("@claveAutor", libro.Autor.ClaveAutor);
+            comandoSQL.Parameters.AddWithValue("@claveCategoria", libro.Categoria.ClaveCategoria);
 
             comandoSQL.CommandText = sentencia;
             comandoSQL.Connection = conexionSQL;

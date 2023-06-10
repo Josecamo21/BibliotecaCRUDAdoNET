@@ -12,24 +12,24 @@ namespace Entities
         {
             ClaveLibro = "";
             Titulo = "";
-            ClaveAutor = "";
-            ClaveCategoria = "";
+            Autor = new Autor();
+            Categoria = new Categoria();
             Existente = false;
         }
-        public Libro(string claveL, string titL, string claveA, string claveC)
+        public Libro(string claveL, string titL, Autor aut, Categoria cat)
         {
             ClaveLibro = claveL;
             Titulo = titL;
-            ClaveAutor = claveA;
-            ClaveCategoria = claveC;
+            Autor = aut;
+            Categoria = cat;
             Existente = false;
         }
 
         //Propiedades
         public string ClaveLibro { get; set; }
         public string Titulo { get; set; }
-        public string ClaveAutor { get; set; }
-        public string ClaveCategoria { get; set; }
+        public Autor Autor { get; set; }
+        public Categoria Categoria { get; set; }
         public bool Existente { get; set; }
 
         //Métodos Opcional - Especialmente para clases que tengan funcionalidades particulares

@@ -25,7 +25,7 @@ namespace BibliotecaCRUDAdoNET.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Server = localhost; Database = biblioteca; Integrated Security = True;")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server = localhost; Database = biblioteca; User ID=generico; Password=123")]
         public string cadenaConexion {
             get {
                 return ((string)(this["cadenaConexion"]));

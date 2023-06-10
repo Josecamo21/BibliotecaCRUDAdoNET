@@ -106,13 +106,13 @@ namespace BibliotecaCRUDAdoNET
                 titulo = txtTitulo.Text;//Sacar el nuevo!
             }
 
-            if (libro.ClaveAutor != txtClaveAutor.Text)
+            if (libro.Autor.ClaveAutor != txtClaveAutor.Text)
             {
                 autor = txtClaveAutor.Text;//
                 result = true;
             }
 
-            if (libro.ClaveCategoria != txtClaveCateroria.Text)
+            if (libro.Categoria.ClaveCategoria != txtClaveCateroria.Text)
             {
                 result = true;
             }
@@ -196,8 +196,8 @@ namespace BibliotecaCRUDAdoNET
                     {
                         libro.ClaveLibro = txtClaveLibro.Text;
                         libro.Titulo = txtTitulo.Text;
-                        libro.ClaveAutor= txtClaveAutor.Text;
-                        libro.ClaveCategoria = txtClaveCateroria.Text;
+                        libro.Autor.ClaveAutor= txtClaveAutor.Text;
+                        libro.Categoria.ClaveCategoria = txtClaveCateroria.Text;
 
                         if (titulo != "" || autor != "")
                         {
@@ -227,10 +227,10 @@ namespace BibliotecaCRUDAdoNET
                     //Insertar
                     libro = new Libro();//Instancia de un Libro
 
-                    libro.ClaveAutor = txtClaveAutor.Text;
+                    libro.Autor.ClaveAutor = txtClaveAutor.Text;
                     libro.Titulo = txtTitulo.Text;
                     libro.ClaveLibro = txtClaveLibro.Text;
-                    libro.ClaveCategoria = txtClaveCateroria.Text;
+                    libro.Categoria.ClaveCategoria = txtClaveCateroria.Text;
                     libro.Existente = false;
 
                     try
@@ -294,8 +294,8 @@ namespace BibliotecaCRUDAdoNET
                 libro = blLibro.RegistroCompleto(condicion);
                 txtClaveLibro.Text = libro.ClaveLibro;
                 txtTitulo.Text = libro.Titulo;
-                txtClaveAutor.Text = libro.ClaveAutor;
-                txtClaveCateroria.Text = libro.ClaveCategoria;
+                txtClaveAutor.Text = libro.Autor.ClaveAutor;
+                txtClaveCateroria.Text = libro.Categoria.ClaveCategoria;
 
                 btnEliminar.Enabled = true;
 

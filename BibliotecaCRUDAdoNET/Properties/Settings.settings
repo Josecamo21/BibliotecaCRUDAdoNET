@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="cadenaConexion" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Server = localhost; Database = biblioteca; Integrated Security = True;</Value>
+      <Value Profile="(Default)">Server = localhost; Database = biblioteca; User ID=generico; Password=123</Value>
     </Setting>
   </Settings>
 </SettingsFile>
