@@ -89,11 +89,28 @@ namespace LogicaNegocio
         public Libro RegistroCompleto(string condicion)
         {
             Libro libro;
+            //Autor autor;
+            //Categoria categoria;
+
+            DAAutor dAAutor = new DAAutor(cadConexion);
             DALibro daLibro = new DALibro(cadConexion);
+            DACategoria dACategoria = new DACategoria(cadConexion);
 
             try
             {
                 libro = daLibro.RegistroCompleto(condicion);
+
+                libro.Autor = dAAutor.RegistroCompleto($"claveAutor = '{libro.Autor.ClaveAutor}'");
+
+
+                //libro.Autor.Nombre = autor.Nombre;
+                //libro.Autor.ApPaterno = autor.ApPaterno;
+                //libro.Autor.ApMaterno = autor.ApMaterno;
+
+                libro.Categoria = dACategoria.RegistroCompleto($"claveCategoria = '{libro.Categoria.ClaveCategoria}'");
+
+
+                //libro.Categoria.Descripcion = categoria.Descripcion;
                 //deberan hacer lo necesario para llenar el autor y la categoria de forma completa
             }
             catch (Exception ex)

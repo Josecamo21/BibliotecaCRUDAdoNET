@@ -25,6 +25,14 @@ namespace PresentacionWeb
                     libro = bLLibro.RegistroCompleto($"claveLibro='{claveLibro}'");
 
                     //cargar los datos en la pagina
+                    txtCLibro.Text = libro.ClaveLibro;
+                    txtTitulo.Text = libro.Titulo;
+                    txtCAutor.Text = libro.Autor.ClaveAutor;
+                    txtNombre.Text = libro.Autor.Nombre;
+                    txtApPaterno.Text = libro.Autor.ApPaterno;
+                    txtApMaterno.Text = libro.Autor.ApMaterno;
+                    txtCCategoria.Text = libro.Categoria.ClaveCategoria;
+                    txtDescripcion.Text = libro.Categoria.Descripcion;
                 }
             }
             catch (Exception ex)
