@@ -17,6 +17,9 @@ namespace PresentacionWeb
             BLLibro bLLibro = new BLLibro(MiConfig.GetCxString);
             Libro libro;
 
+            LlenarAutores();
+            LlenarCategorias();
+
             try
             {
                 if (Session["_claveLibro"] != null)
@@ -56,25 +59,62 @@ namespace PresentacionWeb
         private void LlenarAutores(string filtro = "")
         {
             DataSet ds;
-            
+            BLAutor bLAutor = new BLAutor(MiConfig.GetCxString);
 
-            //try
-            //{
-            //    ds = blLibro.ListarRegistros(); //Invoca a la capa de LOGICA DE NEGOCIO
+            try
+            {
+                ds = bLAutor.ListarRegistros(); //Invoca a la capa de LOGICA DE NEGOCIO
 
-            //    if (ds != null)
-            //    {
-            //        dgvLibros.DataSource = ds.Tables[0];//Llenado desde el DATA SET
+                if (ds != null)
+                {
+                    dgvAutores.DataSource = ds.Tables[0];//Llenado desde el DATA SET
 
-            //        //Todos los GRID se ASP necesitan un Binding(vinculacion a una estructura de datos)
-            //        dgvLibros.DataBind();
-            //    }
+                    //Todos los GRID se ASP necesitan un Binding(vinculacion a una estructura de datos)
+                    dgvAutores.DataBind();
+                }
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    Session["_Err"] = $"Error en el Server: {ex.Message}";//Tratamiento del Error
-            //}
+            }
+            catch (Exception ex)
+            {
+                Session["_Err"] = $"Error en el Server: {ex.Message}";//Tratamiento del Error
+            }
+        }
+        
+
+        private void LlenarCategorias(string filtro = "")
+        {
+            DataSet ds;
+            BLCategoria bLCategoria = new BLCategoria(MiConfig.GetCxString);
+
+            try
+            {
+                ds = bLCategoria.ListarRegistros(); //Invoca a la capa de LOGICA DE NEGOCIO
+
+                if (ds != null)
+                {
+                    dgvCategorias.DataSource = ds.Tables[0];//Llenado desde el DATA SET
+
+                    //Todos los GRID se ASP necesitan un Binding(vinculacion a una estructura de datos)
+                    dgvCategorias.DataBind();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Session["_Err"] = $"Error en el Server: {ex.Message}";//Tratamiento del Error
+            }
+        }
+
+        protected void dgvCategorias_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvCategorias.PageIndex = e.NewPageIndex;
+            LlenarCategorias();
+        }
+
+        protected void dgvAutores_PageIndexChanging1(object sender, GridViewPageEventArgs e)
+        {
+            dgvAutores.PageIndex = e.NewPageIndex;
+            LlenarAutores();
         }
     }
 }

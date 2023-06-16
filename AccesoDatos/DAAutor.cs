@@ -57,5 +57,33 @@ namespace AccesoDatos
 
             return autor;
         }
+
+        public DataSet ListarRegistros()
+        {
+            //Comunicarse a la capa de Acceso a Datos
+            DataSet miDS = new DataSet();
+            string sentenciaSQL = "Select * From Autores";//
+
+            SqlConnection conexionSQL = new SqlConnection(cadConn);
+            SqlDataAdapter adaptadorSQL;
+
+            try
+            {
+                //En automático el Adaptador es capaz de abrir la conexión con SQL
+                adaptadorSQL = new SqlDataAdapter(sentenciaSQL, conexionSQL);
+                adaptadorSQL.Fill(miDS);//Llenar dataSet con datos
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Se ha presentado un error y no se logró cargar los Autores.  Detalle:{ex.Message}");
+            }
+            finally
+            {
+                conexionSQL.Dispose();
+            }
+
+            return miDS;
+        }
+
     }
 }
