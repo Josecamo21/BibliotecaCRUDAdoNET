@@ -54,5 +54,11 @@ namespace PresentacionWeb
             Session["_claveLibro"] = e.CommandArgument.ToString();
             Response.Redirect("EliminarLibro.aspx");
         }
+
+        protected void lnkModificar_Command(object sender, CommandEventArgs e)
+        {
+            Session["_claveLibro"] = e.CommandArgument.ToString();
+            Response.Redirect("MantenimientoLibro.aspx");
+        }
     }
 }

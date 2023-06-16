@@ -10,22 +10,21 @@
             </div>
 
             <%if (Session["_Err"] != null) {%>
-                <% = Session["_Err"] %>
+                <div class="alert alert-danger" role="alert">
 
-                <div class="alert alert-warning" role="alert">
-
+                    <%= Session["_Err"]%>
                     <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
-                </div>
 
+                </div>
             <%}%>
             
 
-            <%if (Session["_Exito"]!=null) {%>
+            <%if (Session["_Exito"] != null) {%>
+                <div class="alert alert-success" role="alert">
 
-                <div class="alert alert-primary" role="alert">
-                    <% = Session["_Exito"] %>
-                    
+                    <%= Session["_Exito"] %>
                     <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+                    
                 </div>
 
             <%}%>
@@ -38,13 +37,18 @@
                     <Columns>
                         <asp:BoundField DataField="claveLibro" HeaderText="Clave Libro" />
                         <asp:BoundField DataField="titulo" HeaderText="Título" />
-                        <asp:BoundField DataField="claveAutor" HeaderText="Clave Autor" />
+                        <asp:BoundField DataField="claveAutor" HeaderText="Clave Autor" Visible="False" />
                         <asp:BoundField DataField="autor" HeaderText="Autor" />
-                        <asp:BoundField DataField="claveCategoria" HeaderText="Clave Categoría" />
+                        <asp:BoundField DataField="claveCategoria" HeaderText="Clave Categoría" Visible="False" />
                         <asp:BoundField DataField="categoria" HeaderText="Categoría" />
                         <asp:TemplateField HeaderText="Eliminar">
                             <ItemTemplate>
-                                <asp:LinkButton ID="lnkEliminar" runat="server" CommandArgument='<%# Eval("claveLibro").ToString() %>' OnCommand="lnkEliminar_Command">Eliminar</asp:LinkButton>
+                                <asp:LinkButton ID="lnkEliminar" runat="server" CommandArgument='<%# Eval("claveLibro").ToString() %>' OnCommand="lnkEliminar_Command" ToolTip="Eliminar"><i class="fa-solid fa-trash-can"></i></asp:LinkButton>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Editar">
+                            <ItemTemplate>
+                                <asp:LinkButton ID="lnkModificar" runat="server" CommandArgument='<%# Eval("claveLibro").ToString() %>' OnCommand="lnkModificar_Command" ToolTip="Modificar"><i class="fa-regular fa-pen-to-square"></i></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>

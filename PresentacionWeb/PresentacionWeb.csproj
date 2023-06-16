@@ -73,6 +73,7 @@
     <Content Include="EliminarLibro.aspx" />
     <Content Include="Inicio.aspx" />
     <Content Include="Libros.aspx" />
+    <Content Include="MantenimientoLibro.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -96,6 +97,13 @@
     </Compile>
     <Compile Include="Libros.aspx.designer.cs">
       <DependentUpon>Libros.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MantenimientoLibro.aspx.cs">
+      <DependentUpon>MantenimientoLibro.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MantenimientoLibro.aspx.designer.cs">
+      <DependentUpon>MantenimientoLibro.aspx</DependentUpon>
     </Compile>
     <Compile Include="master.Master.cs">
       <DependentUpon>master.Master</DependentUpon>

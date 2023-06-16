@@ -3,15 +3,22 @@
     <title>Eliminar Libro</title>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-    <h3>Eliminar Libro</h3>
-    <hr />
-    <asp:TextBox ID="txtCLibro" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtTitulo" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtCAutor" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtNombre" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtApPaterno" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtApMaterno" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtCCategoria" runat="server"></asp:TextBox><br />
-    <asp:TextBox ID="txtDescripcion" runat="server"></asp:TextBox><br />
-    <%--<h4>Título: <% %></h4>--%>
+    
+    <div class="container">
+        <div class="card-header">
+            <h3>Eliminar Libros</h3>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title">Titulo: <% = ViewState["_titulo"] %></h4>
+            <h6 class="card-title">Codigo Libro: <% = Session["_claveLibro"] %></h6>
+            <h6 class="card-title">Autor: <% = ViewState["_autor"] %></h6>
+            <h6 class="card-title">Categoria: <% = ViewState["_categoria"] %></h6>
+            <hr />
+            <p class="card-text">El libró se eliminaría permanentemente! Confirma que desea eliminarlo?</p>
+            <asp:Button ID="btnEliminar" runat="server" Text="Eliminar" CssClass="btn btn-danger" OnClick="btnEliminar_Click" />
+            <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-warning" OnClick="btnCancelar_Click" />
+        </div>
+    </div>
 </asp:Content>

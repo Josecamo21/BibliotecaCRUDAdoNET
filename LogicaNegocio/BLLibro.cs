@@ -89,8 +89,6 @@ namespace LogicaNegocio
         public Libro RegistroCompleto(string condicion)
         {
             Libro libro;
-            //Autor autor;
-            //Categoria categoria;
 
             DAAutor dAAutor = new DAAutor(cadConexion);
             DALibro daLibro = new DALibro(cadConexion);
@@ -100,18 +98,11 @@ namespace LogicaNegocio
             {
                 libro = daLibro.RegistroCompleto(condicion);
 
+
+                //deberan hacer lo necesario para llenar el autor y la categoria de forma completa
                 libro.Autor = dAAutor.RegistroCompleto($"claveAutor = '{libro.Autor.ClaveAutor}'");
 
-
-                //libro.Autor.Nombre = autor.Nombre;
-                //libro.Autor.ApPaterno = autor.ApPaterno;
-                //libro.Autor.ApMaterno = autor.ApMaterno;
-
                 libro.Categoria = dACategoria.RegistroCompleto($"claveCategoria = '{libro.Categoria.ClaveCategoria}'");
-
-
-                //libro.Categoria.Descripcion = categoria.Descripcion;
-                //deberan hacer lo necesario para llenar el autor y la categoria de forma completa
             }
             catch (Exception ex)
             {
@@ -138,6 +129,11 @@ namespace LogicaNegocio
             return result;
         }
 
+        /// <summary>
+        /// Funcion que Elimina un Libro permanentemente de la BD
+        /// </summary>
+        /// <param name="claveLibro">String con la clave del libro en la base de datos</param>
+        /// <returns>Cualquier entero mayor a 0 indica que todo salio bien</returns>
         public int Eliminar(string claveLibro)
         {
             int result = -1;

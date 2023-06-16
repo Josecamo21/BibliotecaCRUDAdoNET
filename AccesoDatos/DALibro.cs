@@ -248,6 +248,11 @@ namespace AccesoDatos
             return true;
         }
 
+        /// <summary>
+        /// Funcion que Elimina un Libro permanentemente de la BD
+        /// </summary>
+        /// <param name="claveLibro">String con la clave del libro en la base de datos</param>
+        /// <returns>Cualquier entero mayor a 0 indica que todo salio bien</returns>
         public int Eliminar(string claveLibro) {
             int result = -1;
             string sentencia = "Delete From Libros Where claveLibro = @claveLibro";
