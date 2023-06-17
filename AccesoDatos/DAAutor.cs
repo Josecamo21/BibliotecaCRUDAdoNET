@@ -58,11 +58,16 @@ namespace AccesoDatos
             return autor;
         }
 
-        public DataSet ListarRegistros()
+        public DataSet ListarRegistros(string condicion)
         {
             //Comunicarse a la capa de Acceso a Datos
             DataSet miDS = new DataSet();
             string sentenciaSQL = "Select * From Autores";//
+
+            if (!string.IsNullOrEmpty(condicion))
+            {
+                sentenciaSQL = $"{sentenciaSQL} Where {condicion}";
+            }
 
             SqlConnection conexionSQL = new SqlConnection(cadConn);
             SqlDataAdapter adaptadorSQL;

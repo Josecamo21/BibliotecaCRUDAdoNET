@@ -55,11 +55,16 @@ namespace AccesoDatos
             return categoria;
         }
 
-        public DataSet ListarRegistros()
+        public DataSet ListarRegistros(string condicion)
         {
             //Comunicarse a la capa de Acceso a Datos
             DataSet miDS = new DataSet();
             string sentenciaSQL = "Select * From Categorias";//
+
+            if (!string.IsNullOrEmpty(condicion))
+            {
+                sentenciaSQL = $"{sentenciaSQL} Where {condicion}";
+            }
 
             SqlConnection conexionSQL = new SqlConnection(cadConn);
             SqlDataAdapter adaptadorSQL;

@@ -20,7 +20,7 @@ namespace LogicaNegocio
             cadConexion = cadenaConexion;
         }
 
-        public DataSet ListarRegistros()
+        public DataSet ListarRegistros(string condicion = "")
         {
             //Comunicarse a la capa de Acceso a Datos
 
@@ -29,7 +29,7 @@ namespace LogicaNegocio
 
             try
             {
-                ds = dAAutor.ListarRegistros();//Llamado a la capa de ACCESO A DATOS
+                ds = dAAutor.ListarRegistros(condicion);//Llamado a la capa de ACCESO A DATOS
             }
             catch (Exception ex)
             {
@@ -39,6 +39,23 @@ namespace LogicaNegocio
             return ds;//Iría lleno, a la capa de PRESENTACION
         }
 
+        public Autor RegistroCompleto(string condicion)
+        {
+            Autor autor;
 
+            DAAutor dAAutor = new DAAutor(cadConexion);
+
+            try
+            {
+                autor = dAAutor.RegistroCompleto(condicion);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return autor;
+        }
     }
 }

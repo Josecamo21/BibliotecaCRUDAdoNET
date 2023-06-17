@@ -12,12 +12,14 @@
              <!--columa 1-->
             <div class="col-2">
                 <asp:Label ID="Label1" runat="server" Text="Clave Libro:" CssClass="form-label"></asp:Label>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ErrorMessage="Clave del Libro Necesario" ControlToValidate="txtClaveLibro" ForeColor="Red">*</asp:RequiredFieldValidator>
                 <asp:TextBox ID="txtClaveLibro" runat="server" CssClass="form-control"></asp:TextBox>
             </div><!-- fin columa 1-->
 
             <!--columa 2-->
             <div class="col-2">
                 <asp:Label ID="Label2" runat="server" Text="Titulo:" CssClass="form-label"></asp:Label>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtTitulo" ErrorMessage="Titulo Necesario" ForeColor="Red">*</asp:RequiredFieldValidator>
                 <asp:TextBox ID="txtTitulo" runat="server" CssClass="form-control"></asp:TextBox>
             </div><!-- fin columa 2-->
 
@@ -25,6 +27,7 @@
             <div class="col-4">
                 <asp:TextBox ID="txtIdAutor" runat="server" Visible="False"></asp:TextBox>
                 <asp:Label ID="Label3" runat="server" Text="Autor:" CssClass="form-label"></asp:Label>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtIdAutor" ErrorMessage="Autor Necesario" ForeColor="Red">*</asp:RequiredFieldValidator>
                 <div class="input-group mb-3">
                     <input type="button" id="btnModalAutor" class="btn btn-outline-primary" value="Buscar" data-bs-toggle="modal" data-bs-target="#modalAutor" />
                     <asp:TextBox ID="txtAutor" runat="server" ReadOnly="true" CssClass="form-control" aria-describedby="btnModalAutor"></asp:TextBox>
@@ -36,12 +39,18 @@
             <div class="col-4">
                 <asp:TextBox ID="txtIdCategoria" runat="server" Visible="False"></asp:TextBox>
                 <asp:Label ID="Label4" runat="server" Text="Categoria:" CssClass="form-label"></asp:Label>
+                <asp:RequiredFieldValidator ID="RequiredFieldValidator4" runat="server" ControlToValidate="txtIdCategoria" ErrorMessage="Categoria Necesaria" ForeColor="Red">*</asp:RequiredFieldValidator>
                 <div class="input-group mb-3">
                     <input type="button" id="btnModalCategoria" class="btn btn-outline-primary" value="Buscar" data-bs-toggle="modal" data-bs-target="#modalCategorias" />
                     <asp:TextBox ID="txtCategoria" runat="server" ReadOnly="true" CssClass="form-control" aria-describedby="btnModalCategoria"></asp:TextBox>
                 </div>
             </div><!-- fin columa 4-->
-
+            <hr />
+            <div class="card-header">
+                <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
+                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-warning" OnClick="btnCancelar_Click" />
+                <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
+            </div>
         </div>
 
             <!-- Modal Autores-->
@@ -54,13 +63,13 @@
                   </div>
                   <div class="modal-body">
                       <asp:TextBox ID="txtFiltroAutor" runat="server"></asp:TextBox>
-                      <asp:Button ID="btnFiltroAutor" runat="server" Text="Buscar" CssClass="btn btn-primary" />
+                      <asp:Button ID="btnFiltroAutor" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnFiltroAutor_Click" />
                       <asp:GridView ID="dgvAutores" runat="server" AllowPaging="True" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" Width="100%" OnPageIndexChanging="dgvAutores_PageIndexChanging1">
                           <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
                           <Columns>
-                              <asp:TemplateField>
+                              <asp:TemplateField HeaderText="Seleccionar">
                                   <ItemTemplate>
-                                      <asp:LinkButton ID="lnkSelecccionar" runat="server" CommandArgument='<%# Eval("claveAutor").ToString() %>' ToolTip="Seleccionar"><i class="fa-solid fa-check"></i></asp:LinkButton>
+                                      <asp:LinkButton ID="lnkSelecccionar" runat="server" CommandArgument='<%# Eval("claveAutor").ToString() %>' ToolTip="Seleccionar" OnCommand="lnkSelecccionar_Command"><i class="fa-solid fa-check"></i></asp:LinkButton>
                                   </ItemTemplate>
                               </asp:TemplateField>
                               <asp:BoundField DataField="claveAutor" HeaderText="Clave Autor" />
@@ -97,13 +106,13 @@
                   </div>
                   <div class="modal-body">
                       <asp:TextBox ID="txtFiltroCategorias" runat="server"></asp:TextBox>
-                      <asp:Button ID="btnFiltroCategorias" runat="server" Text="Buscar" CssClass="btn btn-primary" />
+                      <asp:Button ID="btnFiltroCategorias" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnFiltroCategorias_Click" />
                       <asp:GridView ID="dgvCategorias" runat="server" AllowPaging="True" AutoGenerateColumns="False" CellPadding="4" ForeColor="#333333" GridLines="None" Width="100%" OnPageIndexChanging="dgvCategorias_PageIndexChanging">
                           <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
                           <Columns>
-                              <asp:TemplateField>
+                              <asp:TemplateField HeaderText="Seleccionar">
                                   <ItemTemplate>
-                                      <asp:LinkButton ID="lnkSeleccionar" runat="server" CommandArgument='<%# Eval("claveCategoria").ToString() %>' ToolTip="Seleccionar"><i class="fa-solid fa-check"></i></asp:LinkButton>
+                                      <asp:LinkButton ID="lnkSeleccionar" runat="server" CommandArgument='<%# Eval("claveCategoria").ToString() %>' ToolTip="Seleccionar" OnCommand="lnkSeleccionar_Command"><i class="fa-solid fa-check"></i></asp:LinkButton>
                                   </ItemTemplate>
                               </asp:TemplateField>
                               <asp:BoundField DataField="claveCategoria" HeaderText="Clave Categoria" />
@@ -127,7 +136,7 @@
                 </div>
               </div>
             </div> <!--Fin Modal Categorias-->
-
     </div>
-
+    
+    
 </asp:Content>

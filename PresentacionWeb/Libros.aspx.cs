@@ -60,5 +60,10 @@ namespace PresentacionWeb
             Session["_claveLibro"] = e.CommandArgument.ToString();
             Response.Redirect("MantenimientoLibro.aspx");
         }
+
+        protected void btnNuevoLibro_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("MantenimientoLibro.aspx");
+        }
     }
 }

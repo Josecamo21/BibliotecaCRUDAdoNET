@@ -7,8 +7,10 @@
         <div class="container">
             <div class="card-header text-center">
                 <h2>Gestion de Libros</h2>
-            </div>
-
+        </div>
+            <hr />
+            <asp:Button ID="btnNuevoLibro" runat="server" Text="Agregar Libro" OnClick="btnNuevoLibro_Click" CssClass="btn btn-outline-primary" />
+            <br />
             <%if (Session["_Err"] != null) {%>
                 <div class="alert alert-danger" role="alert">
 
