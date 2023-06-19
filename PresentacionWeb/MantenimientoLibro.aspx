@@ -48,7 +48,7 @@
             <hr />
             <div class="card-header">
                 <asp:Button ID="btnGuardar" runat="server" Text="Guardar" CssClass="btn btn-primary" OnClick="btnGuardar_Click" />
-                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-warning" OnClick="btnCancelar_Click" />
+                <asp:Button ID="btnCancelar" runat="server" Text="Cancelar" CssClass="btn btn-warning" OnClick="btnCancelar_Click" ValidationGroup="Cancelar" />
                 <asp:ValidationSummary ID="ValidationSummary1" runat="server" />
             </div>
         </div>

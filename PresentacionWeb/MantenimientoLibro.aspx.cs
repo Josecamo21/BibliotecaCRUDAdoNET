@@ -39,12 +39,12 @@ namespace PresentacionWeb
                     }
                     else
                     {
-
+                        libro = new Libro();
                     }
                 }
                 else
                 {
-
+                    libro = new Libro();
                 }
             }
             catch (Exception ex)
@@ -197,7 +197,7 @@ namespace PresentacionWeb
         {
             BLLibro bLLibro = new BLLibro(MiConfig.GetCxString);
             //Libro libro;
-            string clave = "", titulo = "", autor = "";
+            string clave = "", titulo = txtTitulo.Text, autor = "";
 
             //Si el libro EXISTE(SQL) quiere decir que hemos cargado uno desde SQL
             if (libro.Existente)
@@ -233,7 +233,7 @@ namespace PresentacionWeb
                 else
                 {
                     Session["_Err"] = "No se han realizado cambios en los datos, por lo que no se ha actualizado nada!";
-                    Limpiar();
+                    //Limpiar();
                 }
             }
             else
@@ -268,7 +268,7 @@ namespace PresentacionWeb
                         {
                             if (bLLibro.Insertar(libro) > 0)
                             {
-                                Session["_Err"] = "Se insertó con éxito el libro";
+                                Session["_Exito"] = "Se insertó con éxito el libro";
                                 //LlenarGrid();
                             }
                             else
@@ -286,6 +286,7 @@ namespace PresentacionWeb
             //Guarda algo NUEVO
 
             Session["_claveLibro"] = null;
+            Session["_Err"] = txtTitulo.Text;
             Response.Redirect("Libros.aspx");
         }
 
@@ -303,7 +304,6 @@ namespace PresentacionWeb
             //LlenarGrid();
             libro = new Libro();
 
-            //btnEliminar.Enabled = false;
         }
 
         private void Actualizar(string clave)
@@ -323,7 +323,7 @@ namespace PresentacionWeb
                     //Asegurarse de mandar el Libro con los datos nuevos!)
                     if (bLLibro.Actualizar(libro, clave))
                     {
-                        Session["_Err"] = "Se han actualizado los datos del Libro de manera exitosa";
+                        Session["_Exito"] = "Se han actualizado los datos del Libro de manera exitosa";
                         Limpiar();
                     }
                     else
@@ -334,7 +334,7 @@ namespace PresentacionWeb
             {
                 if (bLLibro.Actualizar(libro))
                 {
-                    Session["_Err"] = "Se han actualizado los datos del Libro de manera exitosa";
+                    Session["_Exito"] = "Se han actualizado los datos del Libro de manera exitosa";
                     Limpiar();
                 }
                 else
@@ -352,7 +352,7 @@ namespace PresentacionWeb
                 result = true;
             }
 
-            if (!(libro.Titulo == txtTitulo.Text))
+            if (libro.Titulo != txtTitulo.Text)
             {
                 result = true;
                 titulo = txtTitulo.Text;//Sacar el nuevo!
