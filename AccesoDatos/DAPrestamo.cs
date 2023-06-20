@@ -238,5 +238,39 @@ namespace AccesoDatos
 
             return prestamo;
         }
+
+        public bool ActualizarEstado(string clave){
+            bool result;
+
+            string sentencia;
+
+            SqlConnection conexionSQL = new SqlConnection(cadConn);
+            SqlCommand comandoSQL = new SqlCommand();
+
+            sentencia = $"Update Ejemplares set claveEstado='ES002' where claveEjemplar='{clave}'";
+           
+            comandoSQL.CommandText = sentencia;
+            comandoSQL.Connection = conexionSQL;
+
+            try
+            {
+                conexionSQL.Open();
+                result = comandoSQL.ExecuteNonQuery() > 0 ? true : false;
+                conexionSQL.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Se ha presentado un problema! Detalle: {ex.Message}");
+            }
+            finally
+            {
+                conexionSQL.Dispose();
+                comandoSQL.Dispose();
+            }
+
+
+
+            return result;
+        }
     }
 }

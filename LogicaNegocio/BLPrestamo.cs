@@ -99,7 +99,7 @@ namespace LogicaNegocio
         {
             DAPrestamo dAPrestamo = new DAPrestamo(cadConexion);
             int result = -1;
-            string a = "";
+            string a = "",cero = "0";
             int ultimoP = 0;
 
             try
@@ -108,9 +108,20 @@ namespace LogicaNegocio
 
                 a = prestamo.ClavePrestamo.Substring(1, 4);
                 ultimoP = int.TryParse(a, out ultimoP) ? int.Parse(a) : 0;
-                ultimoP = 
+                ultimoP++;
 
-                result = dAPrestamo.InsertarPrestamo(prestamo);
+                prestamo.ClavePrestamo = $"P{ultimoP}";
+
+                while (prestamo.ClavePrestamo.Length != 5)
+                {
+                    prestamo.ClavePrestamo = $"P{cero}{ultimoP}";
+                    cero += "0";
+                }
+
+                if (dAPrestamo.ActualizarEstado(prestamo.Ejemplar.ClaveEjemplar))
+                {
+                    result = dAPrestamo.InsertarPrestamo(prestamo);
+                }
             }
             catch (Exception ex)
             {

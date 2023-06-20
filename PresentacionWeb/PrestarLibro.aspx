@@ -7,11 +7,32 @@
         <div class="card-header text-center">
         <h2>Prestamo de Libros</h2>
         </div>
+        <%if (Session["_Err"] != null) {%>
+                <div class="alert alert-danger" role="alert">
+
+                    <%= Session["_Err"]%>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+
+                </div>
+            <%}%>
+            
+
+            <%if (Session["_Exito"] != null) {%>
+                <div class="alert alert-success" role="alert">
+
+                    <%= Session["_Exito"] %>
+                    <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="alert"></button>
+                    
+                </div>
+
+            <%}%>
+        <br />
         <asp:TextBox ID="txtClaveUsuario" runat="server" Enabled="False"></asp:TextBox>
         <asp:TextBox ID="txtUsuario" runat="server" Enabled="False"></asp:TextBox>
         <asp:TextBox ID="txtEmail" runat="server" Enabled="False"></asp:TextBox>
         <asp:TextBox ID="txtDireccion" runat="server" Enabled="False"></asp:TextBox>
         <asp:TextBox ID="txtPrestamo" runat="server" Enabled="False"></asp:TextBox>
+        <br /> <br />
         <asp:GridView runat="server" ID="dgvClientes" AutoGenerateColumns="False" CellPadding="6" ForeColor="#333333" GridLines="None" Width="100%" AllowPaging="True" EmptyDataText="No se han encontrado Usuarios en la Base de Datos" OnPageIndexChanging="dgvClientes_PageIndexChanging">
             <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
             <Columns>
@@ -75,8 +96,31 @@
             <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
         </asp:GridView>
         
-        <br /> <br /> <hr /> <br />
+        <br /> <hr /> <br />
+        <input id="btnPrestar" type="button" value="Realizar Prestamo" data-bs-toggle="modal" data-bs-target="#modalPrestamo" />
+        <%--<asp:Button ID="btnPrestar" runat="server" Text="Realizar Prestamo" OnClick="btnPrestar_Click" data-toggle="modal" data-target="#modalPrestamo" />--%>
+        <br /> <br />
 
-        <asp:Button ID="btnPrestar" runat="server" Text="Realizar Prestamo" OnClick="btnPrestar_Click" />
+        <!-- Modal Prestamo-->
+            <div class="modal fade" id="modalPrestamo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Prestamo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                      <asp:Label ID="lblTitulo" runat="server" Text=""></asp:Label>
+                      <asp:Label ID="lblLibro" runat="server" Text=""></asp:Label><br />
+                      <asp:Label ID="lblUsuario" runat="server" Text=""></asp:Label>
+                      <asp:Label ID="lblCodigoU" runat="server" Text=""></asp:Label>
+                  </div>
+                  <div class="modal-footer">
+                    <asp:Button ID="btnAceptar" runat="server" Text="Aceptar" CssClass="btn btn-primary" OnClick="btnAceptar_Click" />
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  </div>
+                </div>
+              </div>
+            </div> <%--Fin Modal Prestamo--%>
     </div>
 </asp:Content>

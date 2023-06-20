@@ -12,17 +12,18 @@ namespace PresentacionWeb
 {
     public partial class PrestarLibro : System.Web.UI.Page
     {
-        Ejemplar ejemplar;
-        Usuario usuario;
-        Prestamo prestamo;
+        Prestamo prestamo = new Prestamo();
         protected void Page_Load(object sender, EventArgs e)
         {
-            prestamo = new Prestamo();
-            usuario = new Usuario();
-            ejemplar = new Ejemplar();
             //llamar metodo
             LlenarGridUsuarios();
             LlenarGridEjemplares();
+
+            if (IsPostBack)
+            {
+                RegistroCompletoFunc($"u.claveUsuario='{txtClaveUsuario.Text}'");
+                RegistroCompletoEjemplarFunc($"claveEjemplar='{txtClaveEjemplar.Text}'");
+            }
         }
 
         private void LlenarGridUsuarios()
@@ -62,16 +63,18 @@ namespace PresentacionWeb
             BLPrestamo bLPrestamo = new BLPrestamo(MiConfig.GetCxString);
             try
             {
-                usuario = bLPrestamo.RegistroCompletoUsuario(cond);
-                txtClaveUsuario.Text = usuario.ClaveUsuario;
-                txtUsuario.Text = $"{usuario.Nombre} {usuario.ApPaterno}";
-                txtEmail.Text = usuario.Email;
-                txtDireccion.Text = usuario.Direccion;
-                txtPrestamo.Text = usuario.Moroso;
-                
-                if (ejemplar != null)
+                prestamo.Usuario = bLPrestamo.RegistroCompletoUsuario(cond);
+
+                if (prestamo.Usuario != null)
                 {
-                    prestamo.Usuario = usuario;
+                    txtClaveUsuario.Text = prestamo.Usuario.ClaveUsuario;
+                    txtUsuario.Text = $"{prestamo.Usuario.Nombre} {prestamo.Usuario.ApPaterno}";
+                    txtEmail.Text = prestamo.Usuario.Email;
+                    txtDireccion.Text = prestamo.Usuario.Direccion;
+                    txtPrestamo.Text = prestamo.Usuario.Moroso;
+
+                    lblUsuario.Text = $"Al Cliente: {prestamo.Usuario.Nombre} {prestamo.Usuario.ApPaterno}";
+                    lblCodigoU.Text = $"Codigo Usuario: {prestamo.Usuario.ClaveUsuario}";
                 }
             }
             catch (Exception ex)
@@ -126,18 +129,20 @@ namespace PresentacionWeb
 
             try
             {
-                ejemplar = bLPrestamo.RegistroCompletoEjemplar(cond);
-                txtClaveEjemplar.Text = ejemplar.ClaveEjemplar;
-                txtClaveLibro.Text = ejemplar.Libro.ClaveLibro;
-                txtTitulo.Text = ejemplar.Libro.Titulo;
-                txtCondicion.Text = ejemplar.ClaveCondicion;
-                txtEstado.Text = ejemplar.ClaveEstado;
-                txtEditorial.Text = ejemplar.ClaveEditorial;
-                txtPaginas.Text = ejemplar.Paginas.ToString();
+                prestamo.Ejemplar = bLPrestamo.RegistroCompletoEjemplar(cond);
 
-                if (ejemplar != null) 
+                if (prestamo.Ejemplar != null)
                 {
-                    prestamo.Ejemplar = ejemplar;
+                    txtClaveEjemplar.Text = prestamo.Ejemplar.ClaveEjemplar;
+                    txtClaveLibro.Text = prestamo.Ejemplar.Libro.ClaveLibro;
+                    txtTitulo.Text = prestamo.Ejemplar.Libro.Titulo;
+                    txtCondicion.Text = prestamo.Ejemplar.ClaveCondicion;
+                    txtEstado.Text = prestamo.Ejemplar.ClaveEstado;
+                    txtEditorial.Text = prestamo.Ejemplar.ClaveEditorial;
+                    txtPaginas.Text = prestamo.Ejemplar.Paginas.ToString();
+
+                    lblTitulo.Text = $"Desea prestar el libro: {prestamo.Ejemplar.Libro.Titulo}";
+                    lblLibro.Text = $"Codigo Libro: {prestamo.Ejemplar.ClaveEjemplar}";
                 }
             }
             catch (Exception ex)
@@ -152,12 +157,14 @@ namespace PresentacionWeb
             LlenarGridEjemplares();
         }
 
-        protected void btnPrestar_Click(object sender, EventArgs e)
+
+
+        protected void btnAceptar_Click(object sender, EventArgs e)
         {
             BLPrestamo bLPrestamo = new BLPrestamo(MiConfig.GetCxString);
             int result = -1;
 
-            if (usuario.Moroso == "Si")
+            if (prestamo.Usuario.Moroso == "Si")
             {
                 Session["_Err"] = "El usuario cuenta con un prestamo pendiente";
             }
@@ -166,12 +173,21 @@ namespace PresentacionWeb
                 try
                 {
                     result = bLPrestamo.InsertarPrestamo(prestamo);
+                    if (result > 0)
+                    {
+                        Session["_Exito"] = "Prestamo realizado con Exito";
+                    }
                 }
                 catch (Exception ex)
                 {
                     Session["_Err"] = ex.Message;
                 }
             }
+
+            //llamar metodo
+            LlenarGridUsuarios();
+            LlenarGridEjemplares();
         }
+
     }
 }

@@ -41,16 +41,10 @@ namespace PresentacionWeb
                         }
                         else
                         {
-                            libro = new Libro();
+                            Session["_Err"] = $"Error al cargar el libro";
                         }
                     }
                 }
-                else
-                {
-                    libro = new Libro();
-                }
-                
-
             }
             catch (Exception ex)
             {
