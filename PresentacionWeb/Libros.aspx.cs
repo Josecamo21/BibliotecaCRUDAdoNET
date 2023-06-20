@@ -18,14 +18,14 @@ namespace PresentacionWeb
             LlenarGrid();
         }
 
-        private void LlenarGrid()
+        private void LlenarGrid(string filtro = "")
         {
             //Rellenar el DataGridView
             DataSet ds;
 
             try
             {
-                ds = blLibro.ListarRegistros(); //Invoca a la capa de LOGICA DE NEGOCIO
+                ds = blLibro.ListarRegistros(filtro); //Invoca a la capa de LOGICA DE NEGOCIO
 
                 if (ds != null)
                 {
@@ -64,6 +64,13 @@ namespace PresentacionWeb
         protected void btnNuevoLibro_Click(object sender, EventArgs e)
         {
             Response.Redirect("MantenimientoLibro.aspx");
+        }
+
+        protected void btnFiltroLibro_Click(object sender, EventArgs e)
+        {
+            string filtro = $"titulo like '%{txtFiltroLibro.Text}%' or Autor like '%{txtFiltroLibro.Text}%' " +
+                $"or Categoria like '%{txtFiltroLibro.Text}%' or claveLibro like '%{txtFiltroLibro.Text}%'";
+            LlenarGrid(filtro);
         }
     }
 }

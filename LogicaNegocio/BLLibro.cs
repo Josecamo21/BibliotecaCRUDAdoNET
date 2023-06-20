@@ -18,7 +18,7 @@ namespace LogicaNegocio
         }
 
         //Metodos - Este es el objetivo de la capa de Negocio! 
-        public DataSet ListarRegistros() {
+        public DataSet ListarRegistros(string filtro = "") {
             //Comunicarse a la capa de Acceso a Datos
 
             DataSet ds = new DataSet();
@@ -26,7 +26,7 @@ namespace LogicaNegocio
             
             try
             {
-                ds = daLibro.ListarRegistros();//Llamado a la capa de ACCESO A DATOS
+                ds = daLibro.ListarRegistros(filtro);//Llamado a la capa de ACCESO A DATOS
             }
             catch (Exception ex)
             {

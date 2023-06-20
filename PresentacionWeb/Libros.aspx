@@ -9,7 +9,10 @@
                 <h2>Gestion de Libros</h2>
         </div>
             <hr />
-            <asp:Button ID="btnNuevoLibro" runat="server" Text="Agregar Libro" OnClick="btnNuevoLibro_Click" CssClass="btn btn-outline-primary" />
+            <asp:TextBox ID="txtFiltroLibro" runat="server"></asp:TextBox>
+            <asp:Button ID="btnFiltroLibro" runat="server" Text="Buscar" CssClass="btn btn-primary" OnClick="btnFiltroLibro_Click" />
+            <asp:Button style="float:right" ID="btnNuevoLibro" runat="server" Text="Agregar Libro" OnClick="btnNuevoLibro_Click" CssClass="btn btn-outline-primary" />
+            <hr />  
             <br />
             <%if (Session["_Err"] != null) {%>
                 <div class="alert alert-danger" role="alert">

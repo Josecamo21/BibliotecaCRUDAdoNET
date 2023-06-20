@@ -75,6 +75,7 @@
     <Content Include="JavaScript.js" />
     <Content Include="Libros.aspx" />
     <Content Include="MantenimientoLibro.aspx" />
+    <Content Include="PrestarLibro.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +115,13 @@
       <DependentUpon>master.Master</DependentUpon>
     </Compile>
     <Compile Include="MiConfig.cs" />
+    <Compile Include="PrestarLibro.aspx.cs">
+      <DependentUpon>PrestarLibro.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PrestarLibro.aspx.designer.cs">
+      <DependentUpon>PrestarLibro.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

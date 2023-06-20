@@ -15,11 +15,16 @@ namespace AccesoDatos
         }
 
         //Métodos - Para conectarse a SQL Server
-        public DataSet ListarRegistros()
+        public DataSet ListarRegistros(string filtro = "")
         {
             //Comunicarse a la capa de Acceso a Datos
             DataSet miDS = new DataSet();
             string sentenciaSQL = "Select * From vLibros";//
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                sentenciaSQL = $"{sentenciaSQL} Where {filtro}";
+            }
 
             SqlConnection conexionSQL = new SqlConnection(cadConn);
             SqlDataAdapter adaptadorSQL;

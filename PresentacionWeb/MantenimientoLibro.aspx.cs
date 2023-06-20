@@ -21,31 +21,36 @@ namespace PresentacionWeb
             {
                 if (Session["_claveLibro"] != null)
                 {
-                    string claveLibro = Session["_claveLibro"].ToString();
-                    libro = bLLibro.RegistroCompleto($"claveLibro='{claveLibro}'");
-
-                    if (libro != null)
+                    if (!IsPostBack)
                     {
-                        txtIdAutor.Text = libro.Autor.ClaveAutor;
-                        txtAutor.Text = $"{libro.Autor.ApPaterno}, {libro.Autor.Nombre}";
-                        txtIdCategoria.Text = libro.Categoria.ClaveCategoria;
-                        txtCategoria.Text = libro.Categoria.Descripcion;
-                        txtClaveLibro.Text = libro.ClaveLibro;
-                        txtTitulo.Text = libro.Titulo;
-                        libro.Existente = true;
+                        string claveLibro = Session["_claveLibro"].ToString();
+                        libro = bLLibro.RegistroCompleto($"claveLibro='{claveLibro}'");
 
-                        LlenarAutores();
-                        LlenarCategorias();
-                    }
-                    else
-                    {
-                        libro = new Libro();
+                        if (libro != null)
+                        {
+                            txtIdAutor.Text = libro.Autor.ClaveAutor;
+                            txtAutor.Text = $"{libro.Autor.ApPaterno}, {libro.Autor.Nombre}";
+                            txtIdCategoria.Text = libro.Categoria.ClaveCategoria;
+                            txtCategoria.Text = libro.Categoria.Descripcion;
+                            txtClaveLibro.Text = libro.ClaveLibro;
+                            txtTitulo.Text = libro.Titulo;
+                            libro.Existente = true;
+
+                            LlenarAutores();
+                            LlenarCategorias();
+                        }
+                        else
+                        {
+                            libro = new Libro();
+                        }
                     }
                 }
                 else
                 {
                     libro = new Libro();
                 }
+                
+
             }
             catch (Exception ex)
             {
@@ -190,186 +195,63 @@ namespace PresentacionWeb
         {
             Session["_claveLibro"] = null;
             Session["_Err"] = null;
+            Session["_Exito"] = null;
             Response.Redirect("Libros.aspx");
         }
 
         protected void btnGuardar_Click(object sender, EventArgs e)
         {
             BLLibro bLLibro = new BLLibro(MiConfig.GetCxString);
-            //Libro libro;
-            string clave = "", titulo = txtTitulo.Text, autor = "";
-
-            //Si el libro EXISTE(SQL) quiere decir que hemos cargado uno desde SQL
-            if (libro.Existente)
-            { //Entonces se debe realizar el proceso de UPDATE
-
-                //Actualizar
-
-                //Verificar Cambios
-                if (HayCambios(ref clave, ref titulo, ref autor))
-                {
-                    libro.ClaveLibro = txtClaveLibro.Text;
-                    libro.Titulo = txtTitulo.Text;
-                    libro.Autor.ClaveAutor = txtIdAutor.Text;
-                    libro.Categoria.ClaveCategoria = txtIdCategoria.Text;
-
-                    if (titulo != "" || autor != "")
-                    {
-                        if (bLLibro.Verificar(txtTitulo.Text, txtIdAutor.Text))
-                        {
-                            Session["_Err"] = "Ya existe un libro con el mismo título y del mismo autor";
-                        }
-                        else
-                        {
-                            Actualizar(clave);
-                        }
-
-                    }
-                    else
-                    {
-                        Actualizar(clave);
-                    }
-                }
-                else
-                {
-                    Session["_Err"] = "No se han realizado cambios en los datos, por lo que no se ha actualizado nada!";
-                    //Limpiar();
-                }
-            }
-            else
-            {
-                //Este caso solo se dará cuando se trata de Libros nuevos!
-
-                //Insertar
-                libro = new Libro();//Instancia de un Libro
-
-                libro.ClaveLibro = txtClaveLibro.Text;
-                libro.Titulo = txtTitulo.Text;
-                libro.Autor.ClaveAutor = txtIdAutor.Text;
-                libro.Categoria.ClaveCategoria = txtIdCategoria.Text;
-                libro.Existente = false;
-
-                try
-                {
-                    //Verificar si el Libro está repetido
-                    if (bLLibro.Verificar(txtTitulo.Text, txtIdAutor.Text))
-                    {
-                        Session["_Err"] = "Ya existe un libro con el mismo título y del mismo autor";
-                    }
-                    else
-                    {
-                        //Validar claveLibro única!
-                        if (bLLibro.Verificar(txtClaveLibro.Text))
-                        {
-                            Session["_Err"] = "La clave del Libro no se puede repetir. Modíquela";
-                            txtClaveLibro.Focus();
-                        }
-                        else
-                        {
-                            if (bLLibro.Insertar(libro) > 0)
-                            {
-                                Session["_Exito"] = "Se insertó con éxito el libro";
-                                //LlenarGrid();
-                            }
-                            else
-                            {
-                                Session["_Err"] = "No se insertó el libro";
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Session["_Err"] = ex.Message;
-                }
-            }
-            //Guarda algo NUEVO
-
-            Session["_claveLibro"] = null;
-            Session["_Err"] = txtTitulo.Text;
-            Response.Redirect("Libros.aspx");
-        }
-
-
-
-        private void Limpiar()
-        {
-            txtClaveLibro.Text = "";
-            txtTitulo.Text = "";
-            txtIdAutor.Text = "";
-            txtAutor.Text = "";
-            txtIdCategoria.Text = "";
-            txtCategoria.Text = "";
-
-            //LlenarGrid();
+            BLAutor bLAutor = new BLAutor(MiConfig.GetCxString);
+            BLCategoria bLCategoria = new BLCategoria(MiConfig.GetCxString);
             libro = new Libro();
 
-        }
-
-        private void Actualizar(string clave)
-        {
-            BLLibro bLLibro = new BLLibro(MiConfig.GetCxString);
-
-            if (clave != "")
+            try
             {
-                //Revisar la nueva Clave!!!
-                if (bLLibro.Verificar(txtClaveLibro.Text))
+                libro.Titulo = txtTitulo.Text;
+                libro.ClaveLibro = txtClaveLibro.Text;
+
+                libro.Autor = bLAutor.RegistroCompleto($"claveAutor='{txtIdAutor.Text}'");
+                libro.Categoria = bLCategoria.RegistroCompleto($"claveCategoria='{txtIdCategoria.Text}'");
+
+                if(bLLibro.Verificar(txtClaveLibro.Text))
                 {
-                    Session["_Err"] = "La clave del Libro no se puede repetir. Modíquela";
-                    txtClaveLibro.Focus();
-                }
-                else
-                {
-                    //Asegurarse de mandar el Libro con los datos nuevos!)
-                    if (bLLibro.Actualizar(libro, clave))
+                    if (bLLibro.Actualizar(libro))
                     {
-                        Session["_Exito"] = "Se han actualizado los datos del Libro de manera exitosa";
-                        Limpiar();
+                        Session["_Exito"] = "Se modificó el libro";
                     }
                     else
-                        Session["_Err"] = "No se ha actualizado ningún registro!";
+                    {
+                        Session["_Err"] = "El libro no se pudo modificar en la base de datos";
+                    }
+
                 }
-            }
-            else
-            {
-                if (bLLibro.Actualizar(libro))
+                else if (bLLibro.Verificar(txtTitulo.Text, txtIdAutor.Text))
                 {
-                    Session["_Exito"] = "Se han actualizado los datos del Libro de manera exitosa";
-                    Limpiar();
+                    Session["_Err"] = "El libro ya está en la base de datos";
                 }
                 else
-                    Session["_Err"] = "No se ha actualizado ningún registro!";
+                {
+                    if (bLLibro.Insertar(libro) > 0)
+                    {
+                        Session["_Exito"] = "Se guardó el libro";
+                    }
+                    else
+                    {
+                        Session["_Err"] = "El libro no se pudo guardar en la base de datos";
+                    }
+                }
+
+
             }
-        }
-
-        private bool HayCambios(ref string clave, ref string titulo, ref string autor)
-        {
-            bool result = false;
-
-            if (libro.ClaveLibro != txtClaveLibro.Text)
+            catch (Exception ex)
             {
-                clave = libro.ClaveLibro;//Clave Vieja! La ocupo para el UPDATE
-                result = true;
+                Session["_Err"] = ex.Message;
             }
 
-            if (libro.Titulo != txtTitulo.Text)
-            {
-                result = true;
-                titulo = txtTitulo.Text;//Sacar el nuevo!
-            }
+            Session["_claveLibro"] = null;
+            Response.Redirect("Libros.aspx");
 
-            if (libro.Autor.ClaveAutor != txtIdAutor.Text)
-            {
-                autor = txtIdAutor.Text;//
-                result = true;
-            }
-
-            if (libro.Categoria.ClaveCategoria != txtIdCategoria.Text)
-            {
-                result = true;
-            }
-
-            return result;
         }
     }
 }

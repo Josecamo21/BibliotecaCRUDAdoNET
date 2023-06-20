@@ -15,6 +15,24 @@ namespace PresentacionWeb
     {
 
         /// <summary>
+        /// Control txtFiltroLibro.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtFiltroLibro;
+
+        /// <summary>
+        /// Control btnFiltroLibro.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFiltroLibro;
+
+        /// <summary>
         /// Control btnNuevoLibro.
         /// </summary>
         /// <remarks>
