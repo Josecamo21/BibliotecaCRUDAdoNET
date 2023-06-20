@@ -15,15 +15,50 @@ namespace PresentacionWeb
         Prestamo prestamo = new Prestamo();
         protected void Page_Load(object sender, EventArgs e)
         {
-            //llamar metodo
-            LlenarGridUsuarios();
-            LlenarGridEjemplares();
+            BLPrestamo bLPrestamo = new BLPrestamo(MiConfig.GetCxString);
 
-            if (IsPostBack)
+            try
             {
-                RegistroCompletoFunc($"u.claveUsuario='{txtClaveUsuario.Text}'");
-                RegistroCompletoEjemplarFunc($"claveEjemplar='{txtClaveEjemplar.Text}'");
+                if (Session["_clavePrestamo"] != null)
+                {
+                    if (!IsPostBack)
+                    {
+                        string clavePrestamo = Session["_clavePrestamo"].ToString();
+                        prestamo = bLPrestamo.RegistroCompleto($"clavePrestamo='{clavePrestamo}'");
+
+                        if (prestamo != null)
+                        {
+                            txtIdUsuario.Text = prestamo.Usuario.ClaveUsuario;
+                            txtUsuario.Text = $"{prestamo.Usuario.Nombre} {prestamo.Usuario.ApPaterno}";
+                            txtIdEjemplar.Text = prestamo.Ejemplar.ClaveEjemplar;
+                            txtEjemplar.Text = prestamo.Ejemplar.Libro.Titulo;
+                            txtFechaPrestamo.Text = DateTime.Now.ToString();
+                            txtFechaDevolucion.Text = DateTime.Now.AddDays(30).ToString();
+
+                            LlenarGridUsuarios();
+                            LlenarGridEjemplares();
+                        }
+                        else
+                        {
+                            Session["_Err"] = $"Error al cargar el prestamo";
+                        }
+                    }
+                }
+                else
+                {
+
+                    txtFechaPrestamo.Text = DateTime.Now.ToString();
+                    txtFechaDevolucion.Text = DateTime.Now.AddDays(30).ToString();
+
+                    LlenarGridUsuarios();
+                    LlenarGridEjemplares();
+                }
             }
+            catch (Exception ex)
+            {
+                Session["_Err"] = $"Error: {ex.Message}";
+            }
+
         }
 
         private void LlenarGridUsuarios()
@@ -67,14 +102,8 @@ namespace PresentacionWeb
 
                 if (prestamo.Usuario != null)
                 {
-                    txtClaveUsuario.Text = prestamo.Usuario.ClaveUsuario;
+                    txtIdUsuario.Text = prestamo.Usuario.ClaveUsuario;
                     txtUsuario.Text = $"{prestamo.Usuario.Nombre} {prestamo.Usuario.ApPaterno}";
-                    txtEmail.Text = prestamo.Usuario.Email;
-                    txtDireccion.Text = prestamo.Usuario.Direccion;
-                    txtPrestamo.Text = prestamo.Usuario.Moroso;
-
-                    lblUsuario.Text = $"Al Cliente: {prestamo.Usuario.Nombre} {prestamo.Usuario.ApPaterno}";
-                    lblCodigoU.Text = $"Codigo Usuario: {prestamo.Usuario.ClaveUsuario}";
                 }
             }
             catch (Exception ex)
@@ -133,16 +162,8 @@ namespace PresentacionWeb
 
                 if (prestamo.Ejemplar != null)
                 {
-                    txtClaveEjemplar.Text = prestamo.Ejemplar.ClaveEjemplar;
-                    txtClaveLibro.Text = prestamo.Ejemplar.Libro.ClaveLibro;
-                    txtTitulo.Text = prestamo.Ejemplar.Libro.Titulo;
-                    txtCondicion.Text = prestamo.Ejemplar.ClaveCondicion;
-                    txtEstado.Text = prestamo.Ejemplar.ClaveEstado;
-                    txtEditorial.Text = prestamo.Ejemplar.ClaveEditorial;
-                    txtPaginas.Text = prestamo.Ejemplar.Paginas.ToString();
-
-                    lblTitulo.Text = $"Desea prestar el libro: {prestamo.Ejemplar.Libro.Titulo}";
-                    lblLibro.Text = $"Codigo Libro: {prestamo.Ejemplar.ClaveEjemplar}";
+                    txtIdEjemplar.Text = prestamo.Ejemplar.ClaveEjemplar;
+                    txtEjemplar.Text = prestamo.Ejemplar.Libro.Titulo;
                 }
             }
             catch (Exception ex)
@@ -158,19 +179,31 @@ namespace PresentacionWeb
         }
 
 
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Session["_clavePrestamo"] = null;
+            Session["_Err"] = null;
+            Session["_Exito"] = null;
+            Response.Redirect("Prestamos.aspx");
+        }
 
-        protected void btnAceptar_Click(object sender, EventArgs e)
+        protected void btnGuardar_Click(object sender, EventArgs e)
         {
             BLPrestamo bLPrestamo = new BLPrestamo(MiConfig.GetCxString);
             int result = -1;
+            prestamo = new Prestamo();
 
-            if (prestamo.Usuario.Moroso == "Si")
+            try
             {
-                Session["_Err"] = "El usuario cuenta con un prestamo pendiente";
-            }
-            else
-            {
-                try
+                prestamo.Usuario = bLPrestamo.RegistroCompletoUsuario($"u.claveUsuario = '{txtIdUsuario.Text}'");
+                prestamo.Ejemplar = bLPrestamo.RegistroCompletoEjemplar($"claveEjemplar = '{txtIdEjemplar.Text}'");
+
+                if (prestamo.Usuario.Moroso == "Si")
+                {
+                    Session["_Err"] = "El usuario cuenta con un prestamo pendiente";
+                    Response.Redirect("Prestamos.aspx");
+                }
+                else
                 {
                     result = bLPrestamo.InsertarPrestamo(prestamo);
                     if (result > 0)
@@ -178,16 +211,16 @@ namespace PresentacionWeb
                         Session["_Exito"] = "Prestamo realizado con Exito";
                     }
                 }
-                catch (Exception ex)
-                {
-                    Session["_Err"] = ex.Message;
-                }
+            }
+            catch (Exception ex)
+            {
+                Session["_Err"] = ex.Message;
             }
 
-            //llamar metodo
-            LlenarGridUsuarios();
-            LlenarGridEjemplares();
-        }
 
+
+            Session["_clavePrestamo"] = null;
+            Response.Redirect("Prestamos.aspx");
+        }
     }
 }

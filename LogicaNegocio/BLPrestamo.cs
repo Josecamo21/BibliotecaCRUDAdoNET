@@ -20,6 +20,70 @@ namespace LogicaNegocio
             cadConexion = cadenaConexion;
         }
 
+        public DataSet ListarRegistros(string filtro = "")
+        {
+            //Comunicarse a la capa de Acceso a Datos
+
+            DataSet ds = new DataSet();
+            DAPrestamo dAPrestamo = new DAPrestamo(cadConexion);//Instancia capa de ACCESO A DATOS
+
+            try
+            {
+                ds = dAPrestamo.ListarRegistros(filtro);//Llamado a la capa de ACCESO A DATOS
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return ds;//Iría lleno, a la capa de PRESENTACION
+        }
+
+        public Prestamo RegistroCompleto(string condicion)
+        {
+            Prestamo prestamo;
+
+            DAPrestamo dAPrestamo = new DAPrestamo(cadConexion);
+
+            try
+            {
+                prestamo = dAPrestamo.RegistroCompleto(condicion);
+
+
+                //deberan hacer lo necesario para llenar el autor y la categoria de forma completa
+                //prestamo = dAAutor.RegistroCompleto($"claveAutor = '{prestamo.Autor.ClaveAutor}'");
+
+                //prestamo = dACategoria.RegistroCompleto($"claveCategoria = '{prestamo.Categoria.ClaveCategoria}'");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return prestamo;
+        }
+
+        public int Eliminar(string clavePrestamo)
+        {
+            int result = -1;
+            bool act;
+            DAPrestamo dAPrestamo = new DAPrestamo(cadConexion);
+
+            try
+            {
+                result = dAPrestamo.Eliminar(clavePrestamo);
+
+                act = dAPrestamo.ActualizarEstado(clavePrestamo, "ES003");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+            return result;
+        }
+
+
 
         ////Prestamos
         public DataSet ListarRegistrosClientes()
@@ -118,7 +182,7 @@ namespace LogicaNegocio
                     cero += "0";
                 }
 
-                if (dAPrestamo.ActualizarEstado(prestamo.Ejemplar.ClaveEjemplar))
+                if (dAPrestamo.ActualizarEstado(prestamo.Ejemplar.ClaveEjemplar, "ES002"))
                 {
                     result = dAPrestamo.InsertarPrestamo(prestamo);
                 }

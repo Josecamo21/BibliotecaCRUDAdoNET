@@ -44,7 +44,7 @@
             <a class="nav-link" href="Libros.aspx">Libros</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="PrestarLibro.aspx">Prestamos</a>
+            <a class="nav-link" href="Prestamos.aspx">Prestamos</a>
           </li>
           <%--<li class="nav-item">
             <a class="nav-link disabled">Disabled</a>

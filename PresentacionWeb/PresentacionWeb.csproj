@@ -71,10 +71,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="EliminarLibro.aspx" />
+    <Content Include="EliminarPrestamo.aspx" />
     <Content Include="Inicio.aspx" />
     <Content Include="JavaScript.js" />
     <Content Include="Libros.aspx" />
     <Content Include="MantenimientoLibro.aspx" />
+    <Content Include="Prestamos.aspx" />
     <Content Include="PrestarLibro.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -85,6 +87,13 @@
     </Compile>
     <Compile Include="EliminarLibro.aspx.designer.cs">
       <DependentUpon>EliminarLibro.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="EliminarPrestamo.aspx.cs">
+      <DependentUpon>EliminarPrestamo.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="EliminarPrestamo.aspx.designer.cs">
+      <DependentUpon>EliminarPrestamo.aspx</DependentUpon>
     </Compile>
     <Compile Include="Inicio.aspx.cs">
       <DependentUpon>Inicio.aspx</DependentUpon>
@@ -115,6 +124,13 @@
       <DependentUpon>master.Master</DependentUpon>
     </Compile>
     <Compile Include="MiConfig.cs" />
+    <Compile Include="Prestamos.aspx.cs">
+      <DependentUpon>Prestamos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Prestamos.aspx.designer.cs">
+      <DependentUpon>Prestamos.aspx</DependentUpon>
+    </Compile>
     <Compile Include="PrestarLibro.aspx.cs">
       <DependentUpon>PrestarLibro.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

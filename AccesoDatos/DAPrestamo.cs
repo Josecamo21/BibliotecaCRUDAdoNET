@@ -15,6 +15,113 @@ namespace AccesoDatos
             cadConn = cn; // Inicializar Cadena de Conexion
         }
 
+        public DataSet ListarRegistros(string filtro = "")
+        {
+            //Comunicarse a la capa de Acceso a Datos
+            DataSet miDS = new DataSet();
+            string sentenciaSQL = "Select * From vPrestamos";//
+
+            if (!string.IsNullOrEmpty(filtro))
+            {
+                sentenciaSQL = $"{sentenciaSQL} Where {filtro}";
+            }
+
+            SqlConnection conexionSQL = new SqlConnection(cadConn);
+            SqlDataAdapter adaptadorSQL;
+
+            try
+            {
+                //En automático el Adaptador es capaz de abrir la conexión con SQL
+                adaptadorSQL = new SqlDataAdapter(sentenciaSQL, conexionSQL);
+                adaptadorSQL.Fill(miDS);//Llenar dataSet con datos
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Se ha presentado un error y no se logró cargar los Libros.  Detalle:{ex.Message}");
+            }
+            finally
+            {
+                conexionSQL.Dispose();
+            }
+
+            return miDS;
+        }
+
+        public Prestamo RegistroCompleto(string condicion)
+        {
+            Prestamo prestamo = new Prestamo();
+
+            SqlConnection conexionSQL = new SqlConnection(cadConn);
+            SqlCommand comandoSQL = new SqlCommand();
+            SqlDataReader dato;
+
+            comandoSQL.Connection = conexionSQL;
+            comandoSQL.CommandText = $"Select * from vPrestamos where {condicion}";
+
+            try
+            {
+                conexionSQL.Open();
+                dato = comandoSQL.ExecuteReader();
+                if (dato.HasRows)
+                {
+                    dato.Read();//Cursor está en la primera fila
+
+                    //Se llena la instancia de Libro con los datos que están dentro del DATAREADER (dato)
+                    prestamo.ClavePrestamo = dato.GetString(0);
+                    prestamo.Ejemplar.ClaveEjemplar = dato.GetString(1);
+                    prestamo.Ejemplar.Libro.Titulo = dato.GetString(2);
+                    prestamo.Usuario.ClaveUsuario = dato.GetString(3);
+                    prestamo.Usuario.Nombre = dato.GetString(4);
+                    prestamo.FechaPrestamo = dato.GetDateTime(5);
+                    prestamo.FechaDevolucion = dato.GetDateTime(6);
+                }
+                conexionSQL.Close();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error recuperando Registro. Detalle: {ex.Message}");
+            }
+            finally
+            {
+                conexionSQL.Dispose();
+                comandoSQL.Dispose();
+            }
+
+            return prestamo;
+        }
+
+        public int Eliminar(string clavePrestamo)
+        {
+            int result = -1;
+            string sentencia = "Delete From Prestamos Where clavePrestamo = @clavePrestamo";
+
+            SqlConnection conexionSQL = new SqlConnection(cadConn);
+            SqlCommand comandoSQL = new SqlCommand();
+
+            comandoSQL.Connection = conexionSQL;
+            comandoSQL.CommandText = sentencia;
+            comandoSQL.Parameters.AddWithValue("@clavePrestamo", clavePrestamo);
+
+            try
+            {
+                conexionSQL.Open();
+                result = comandoSQL.ExecuteNonQuery();
+                conexionSQL.Close();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                conexionSQL.Dispose();
+                comandoSQL.Dispose();
+            }
+
+            return result;
+        }
+
+
         ////Prestamos
         public DataSet ListarRegistrosClientes()
         {
@@ -239,7 +346,7 @@ namespace AccesoDatos
             return prestamo;
         }
 
-        public bool ActualizarEstado(string clave){
+        public bool ActualizarEstado(string clave, string estado){
             bool result;
 
             string sentencia;
@@ -247,7 +354,7 @@ namespace AccesoDatos
             SqlConnection conexionSQL = new SqlConnection(cadConn);
             SqlCommand comandoSQL = new SqlCommand();
 
-            sentencia = $"Update Ejemplares set claveEstado='ES002' where claveEjemplar='{clave}'";
+            sentencia = $"Update Ejemplares set claveEstado='{estado}' where claveEjemplar='{clave}'";
            
             comandoSQL.CommandText = sentencia;
             comandoSQL.Connection = conexionSQL;
